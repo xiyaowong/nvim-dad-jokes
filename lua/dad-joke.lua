@@ -3,6 +3,8 @@ local config = {
   interval = 10 * 60 * 1000,
   display_timeout = 5000,
 }
+local running = false
+local should_stop = false
 
 ---@param lines table/string
 local function notify(lines)
@@ -69,12 +71,17 @@ local function fetch()
 end
 
 local function start()
+  if running then
+    return
+  end
+  running = true
+  should_stop = false
   notify '🎉Hurray!!! Dad Jokes is active🎉'
-  config.enable_interval = true
   vim.schedule(fetch)
   local timer
   timer = vim.fn.timer_start(config.interval, function()
-    if not config.enable_interval then
+    if should_stop then
+      running = false
       vim.fn.timer_stop(timer)
       return
     end
@@ -85,13 +92,15 @@ local function start()
 end
 
 local function stop()
+  if not running then
+    return
+  end
   notify 'Dad Jokes is deactive!'
-  config.enable_interval = false
+  should_stop = true
 end
 
 local function setup(opts)
-  opts = opts or {}
-  vim.tbl_extend('force', config, opts)
+  config = vim.tbl_extend('force', config, opts or {})
   if config.enable_interval then
     start()
   end
