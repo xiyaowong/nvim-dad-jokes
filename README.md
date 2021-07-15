@@ -22,4 +22,4 @@ require('dad-joke').setup({
 :DadJokeStop
 ```
 
-## Inspired from [vscode-dad-jokes](https://github.com/nikhiltatpati/vscode-dad-jokes)
+## Inspired by [vscode-dad-jokes](https://github.com/nikhiltatpati/vscode-dad-jokes)
